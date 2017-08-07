@@ -3,10 +3,10 @@ import { Authentication } from '../components';
 
 const Register = () => {
   return (
-    <div>
+    <main>
       <h1>Register</h1>
       <Authentication mode={false}/>
-    </div>
+    </main>
   );
 }
 

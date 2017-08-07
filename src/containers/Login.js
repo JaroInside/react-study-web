@@ -3,10 +3,10 @@ import { Authentication } from '../components';
 
 const Login = () => {
   return (
-    <div>
+    <main>
       <h1>Login</h1>
       <Authentication mode={true}/>
-    </div>
+    </main>
   );
 }
 

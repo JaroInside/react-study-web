@@ -1,20 +1,26 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { Home, Login, Register, About, NotFound } from '../containers';
+import { Header, Sidebar, Footer } from '../components';
 
 class App extends Component {
 
   render() {
     return (
       <Router>
-        <div className="App">
-          <Switch>
-            <Route exact={true} path='/' component={Home}/>
-            <Route path='/About' component={About}/>
-            <Route path='/login' component={Login}/>
-            <Route path='/register' component={Register}/>
-            <Route component={NotFound} />
-          </Switch>
+        <div className="container">
+          <Header />
+          <section className="content">
+            <Sidebar />
+            <Switch>
+              <Route exact={true} path='/' component={Home}/>
+              <Route path='/About' component={About}/>
+              <Route path='/login' component={Login}/>
+              <Route path='/register' component={Register}/>
+              <Route component={NotFound} />
+            </Switch>
+          </section>
+          <Footer />
         </div>
       </Router>
     );
