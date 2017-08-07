@@ -4,7 +4,7 @@ import '../index.css';
 
 const Sidebar = () => {
   return (
-    <nav>
+    <nav className='sidemenu'>
       <ul>
         <li><Link to="/">Home</Link></li>
         <li><Link to="/About">About</Link></li>

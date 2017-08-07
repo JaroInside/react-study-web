@@ -11,8 +11,14 @@ const Header = (props) => {
       </div>
       <div className='right-content'>
         <ul>
-          <li className='auth'><Link to="/Login">Login</Link></li>
-          <li className='auth'><Link to="/Register">Register</Link></li>  
+          <li className='auth'><Link className='fa fa-user-circle fa-2x' aria-hidden='true' to="/Login"></Link></li>
+          <li className='dropdown-menu fa fa-bars' aria-hidden="true">
+            <ul>
+              <li><Link to="/">Home</Link></li>
+              <li><Link to="/About">About</Link></li>
+              <li><Link to="/Login">Login</Link></li>
+            </ul>
+          </li>
         </ul>
       </div>
     </header>

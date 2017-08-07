@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
+import * as React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { Home, Login, Register, About, NotFound } from '../containers';
 import { Header, Sidebar, Footer } from '../components';
 
-class App extends Component {
+class App extends React.Component {
 
   render() {
     return (
