@@ -58,7 +58,8 @@ export default [
     type: 'image',
     src: '//s3.ap-northeast-2.amazonaws.com/jarotestimg/aaa.png',
     alt: 'Test',
-    figcaption: 'Test'
+    figcaption: 'Test',
+    link: 'https://www.facebook.com/JaroInside'
   },
   {
     type: 'image',

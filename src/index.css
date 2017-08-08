@@ -59,12 +59,17 @@ section {
   margin-bottom: 20px;
 }
 
+section .sidemenu {
+  min-width: 140px;
+}
+
 section nav {
   flex-shrink: 0;
   border-right:1px solid gray;
 }
 
 nav ul {
+  position: fixed;
   padding-left: 50px;
   padding-right: 50px;
 }
@@ -102,9 +107,9 @@ main .working {
   -moz-column-count: 6;
   -webkit-column-count: 6;
   column-count: 6;
-  -webkit-column-width: 100px;
-  -moz-column-width: 100px;
-  column-width: 100px;
+  -webkit-column-width: 200px;
+  -moz-column-width: 200px;
+  column-width: 200px;
   -webkit-column-gap: 0.5rem;
   -moz-column-gap: 0.5rem;
   column-gap: 0;
