@@ -14,7 +14,7 @@ class App extends React.Component {
             <Sidebar />
             <Switch>
               <Route exact={true} path='/' component={Home}/>
-              <Route path='/About' component={About}/>
+              <Route path='/About' component={About} data='data'/>
               <Route path='/login' component={Login}/>
               <Route path='/register' component={Register}/>
               <Route component={NotFound} />
