@@ -38,10 +38,6 @@ header li ul {
   border: 1px solid black;
 }
 
-/* header .dropdown-menu:hover .dropdown-submenu { 
-  display:block;
-} */
-
 /* content  */
 
 .content{
@@ -97,14 +93,13 @@ main .working {
 .columns{
   column-count: 4;
   column-width: 200px;
-  column-gap: 1em;
+  column-gap: 1rem;
 }
 
 .columns figure{
   display: inline-block;
   border:1px solid rgba(0,0,0,0.2);
   margin: 0 0 1em;
-  width: 100%;
   margin-bottom: 15px;
   padding:10px;
   box-shadow: 2px 2px 5px rgba(0,0,0,0.5);;
@@ -155,6 +150,12 @@ li {
     padding: 0px;
   }
 
+  .container{
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+  }
+
   nav {
     display:none;
   }
@@ -172,8 +173,17 @@ li {
     margin-left: -45px;
   }
 
+  section main {
+    padding: 0px;
+  }
+
   .columns{
-    column-count: 1;
+    column-count: 2;
+    column-width: 50px;
+    column-gap: 1rem;
+  }
+  .columns figure figcaption{
+    display: none;
   }
 
 }
