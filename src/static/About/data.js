@@ -1,3 +1,4 @@
+// 나중에 디비로..
 export default [
   {
     type: 'image',
