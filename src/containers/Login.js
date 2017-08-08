@@ -5,13 +5,9 @@ import { Authentication } from '../components';
 class Login extends React.Component {
 
   componentDidMount() {
-    document.getElementsByClassName('sidemenu')[0].style.display = "none";
-    document.getElementsByClassName('auth')[0].style.display = "none";
   }
 
   componentWillUnmount() {
-    document.getElementsByClassName('sidemenu')[0].style.display = "block";
-    document.getElementsByClassName('auth')[0].style.display = "block";
   }
 
   render() {

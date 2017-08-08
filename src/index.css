@@ -29,7 +29,6 @@ header .dropdown-menu {
 
 header li ul { 
   background-color: white;
-  display:none;
   height:auto; 
   padding:5px; 
   margin:0px; 
@@ -39,9 +38,9 @@ header li ul {
   border: 1px solid black;
 }
 
-header li:hover ul { 
+/* header .dropdown-menu:hover .dropdown-submenu { 
   display:block;
-}
+} */
 
 /* content  */
 
