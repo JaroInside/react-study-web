@@ -24,7 +24,7 @@ class Header extends React.Component {
         <div className='right-content'>
           <ul>
             <li className='auth'><Link className='fa fa-user-circle fa-2x' aria-hidden='true' to="/Login"></Link></li>
-            <li className='dropdown-menu fa fa-bars' aria-hidden="true">
+            <li className='dropdown-menu fa fa-bars fa-2x' aria-hidden="true">
               <ul className='dropdown-submenu'>
                 <li><Link to="/">Home</Link></li>
                 <li><Link to="/About">About</Link></li>
