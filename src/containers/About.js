@@ -8,10 +8,12 @@ class About extends React.Component {
   componentDidMount() {
     $('figure').hover(
       function(){
-        $(this).siblings().stop().fadeTo(300, 0.3);
+        $(this).siblings().fadeTo(0, 0.3);
+        $(this).children('figcaption').stop().show();
       },
        function() {
-        $(this).siblings().stop().fadeTo(300, 1);
+        $(this).siblings().fadeTo(0, 1);
+        $(this).children('figcaption').stop().hide();
       }
     );
   }

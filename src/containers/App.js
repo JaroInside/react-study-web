@@ -8,9 +8,9 @@ class App extends React.Component {
   render() {
     return (
       <Router>
-        <div className="container">
+        <div className='container'>
           <Header />
-          <section className="content">
+          <section className='content'>
             <Sidebar />
             <Switch>
               <Route exact={true} path='/' component={Home}/>
