@@ -58,7 +58,7 @@ export default [
     type: 'image',
     src: '//s3.ap-northeast-2.amazonaws.com/jarotestimg/aaa.png',
     alt: 'Test',
-    figcaption: 'Test',
+    figcaption: '클릭하면 FaceBook으로 연결됩니다.',
     link: 'https://www.facebook.com/JaroInside'
   },
   {

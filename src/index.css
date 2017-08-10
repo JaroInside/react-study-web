@@ -120,6 +120,8 @@ main .working {
   margin: 0 0 1em;
   margin-bottom: 0;
   padding: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
 }
 .columns figure img{
   width: 100% !important;
@@ -147,9 +149,6 @@ main .working {
   -o-transform: translate(-50%, 0%);
   transform: translate(-50%, 0%);
 
-  /* border-top:1px solid rgba(0,0,0,0.2);
-  padding:10px;
-  margin-top:11px; */
 }
 
 /* Footer  */
@@ -192,8 +191,13 @@ li {
     padding: 20px;
   }
 
-  nav {
-    display:none;
+  header {
+    position: fixed;
+    top: 0px;
+    padding: 0;
+    width: 304px;
+    background-color: white;
+    z-index: 100;
   }
 
   header .auth {
@@ -208,6 +212,14 @@ li {
     margin-top: 10px;
     margin-left: -45px;
   }
+  
+  section {
+    margin-top: 70px;
+  }
+
+  nav {
+    display:none;
+  }
 
   section main {
     padding: 0px;
@@ -221,6 +233,13 @@ li {
     -moz-column-width: 50px;
     column-width: 50px;
   }
+
+  .columns figure{
+    padding: 6px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+  }
+
   .columns figure figcaption{
     top: 70px;
     width: 300px;
