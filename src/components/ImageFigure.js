@@ -8,10 +8,12 @@ const ImageFigure = (props) => {
       <img src={data.src} data-link={data.link} alt={data.alt} />:
       <img src={data.src} alt={data.alt} />;
 
+  const caption = (data.figcaption===undefined || data.figcaption==='')? null : <figcaption>{data.figcaption}</figcaption>;
+
   return (
     <figure>
       {img}
-      <figcaption>{data.figcaption}</figcaption>
+      {caption}
     </figure>
   );
 }

@@ -1,3 +1,8 @@
+body {
+  margin-left: 50px;
+  margin-right: 50px;
+}
+
 .container{
   display: flex;
   -ms-flex-direction: column;
@@ -60,7 +65,16 @@ section {
 }
 
 section .sidemenu {
-  min-width: 140px;
+  min-width: 200px;
+}
+
+section .sidemenu .clock {
+  margin-top: 20px;
+}
+
+section .sidemenu .digital-clock {
+  font-family: 'liquid_crystalregular', sans-serif;
+  font-size: 1rem;
 }
 
 section nav {
@@ -70,8 +84,11 @@ section nav {
 
 nav ul {
   position: fixed;
-  padding-left: 50px;
-  padding-right: 50px;
+  padding: 0;
+}
+
+nav .navMenu {
+  font-size: 1.5rem;
 }
 
 section main {
@@ -79,6 +96,16 @@ section main {
   text-align: justify;
   padding-left:30px;
   padding-right:30px;
+}
+
+main .device {
+  position: absolute;
+  top: 100px;
+  left: 120px;
+  margin: 0px;
+  font-size: 1rem;
+  text-align: right;
+  z-index: 200;
 }
 
 main .working {
@@ -183,7 +210,7 @@ li {
 
   body {
     justify-content: flex-start;
-    margin-top: 0px;
+    margin: 0px;
     padding: 0px;
   }
 
@@ -195,9 +222,8 @@ li {
     position: fixed;
     top: 0px;
     padding: 0;
-    width: 304px;
+    width: 320px;
     background-color: white;
-    z-index: 100;
   }
 
   header .auth {
@@ -225,6 +251,15 @@ li {
     padding: 0px;
   }
 
+  main .device {
+    position: absolute;
+    top: 40px;
+    left: 20px;
+    font-size: 0.5rem;
+    text-align: left;
+    z-index: 200;
+  }
+
   .columns{
     -moz-column-count: 2;
     -webkit-column-count: 2;
@@ -243,5 +278,10 @@ li {
   .columns figure figcaption{
     top: 70px;
     width: 300px;
+  }
+
+  .brand-logo {
+    font-size: 1rem;
+
   }
 }

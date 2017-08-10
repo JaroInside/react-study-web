@@ -3,25 +3,23 @@ import { ImageFigure } from '../components';
 import $ from 'jquery';
 import data from '../static/About/data' 
 import { observer } from 'mobx-react';
-import { deviceType, mobileTouch } from '../stores';
-
+import { deviceType } from '../stores';
+import { mobileTouch } from '../object';
 
 const About = observer(class About extends React.Component {
 
   componentDidMount() {
-    // 웹과 모바일에서의 이벤트를 다르게 적용한다.
     this.checkDeviceEvent();
-    $(window).resize(() => {
-      deviceType.checkDevice();
-      if(deviceType.isChange) {
-        this.checkDeviceEvent();
-        deviceType.isChange = false;
-      }
-    });
   }
 
   componentWillUnmount() {
-    
+    this.unbindPcEvent();
+    this.unbindMobileEvent();
+  }
+
+  componentDidUpdate() {
+    console.log('componentDidUpdate');
+    this.checkDeviceEvent();
   }
 
   checkDeviceEvent() {
@@ -30,9 +28,11 @@ const About = observer(class About extends React.Component {
   }
 
   pcEvent() {
+    console.log('pcEvent');
     this.unbindMobileEvent();
     $('figure').hover(
       function(){
+        console.log('hoverstart');
         $(this).siblings().stop().fadeTo(0, 0.5);
         $(this).children('figcaption').stop().show(0);
         $(this).click(() => {
@@ -58,8 +58,9 @@ const About = observer(class About extends React.Component {
 
   // touch이벤트로 바꿀것
   mobileEvent() {
+    console.log('mobileEvent');
     this.unbindPcEvent();
-    this.mobileTapEvent($('figure'),
+    mobileTouch.mobileTapEvent($('figure'),
       function() {
 
       }, function() {
@@ -99,7 +100,7 @@ const About = observer(class About extends React.Component {
       }
     );
 
-    this.mobileTapEvent($('#root').not('figure'), 
+    mobileTouch.mobileTapEvent($('#root').not('figure'), 
       function() {
 
       }, function() {
@@ -118,34 +119,10 @@ const About = observer(class About extends React.Component {
     $('#root').unbind('touchstart touchmove touchend');
   }
 
-  mobileTapEvent(_dom,_startEvent, _moveEvent, _endEvent) {
-
-    _dom.bind('touchstart', function(e){
-      e.stopPropagation();
-      _startEvent(e, this);
-      mobileTouch.touchStart = true;
-    });
-
-    _dom.bind('touchmove',function(e) {
-      e.stopPropagation();
-      if(!mobileTouch.touchStart) {
-        return;
-      }
-      _moveEvent(e, this);
-      mobileTouch.touchMove = true;
-    });
-
-    _dom.bind('touchend', function(e){
-      e.stopPropagation();
-      _endEvent(e, this);
-      mobileTouch.touchStart = false;
-      mobileTouch.touchMove = false;
-    });
-  }
-
   render() {
     return (
       <main>
+        <h1 className='device'>{deviceType.device.toLowerCase()}</h1>
         <div className='columns'>
           {data.map((contact, i) => {
             if(data[i].type === 'image') {

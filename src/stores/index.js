@@ -1,4 +1,4 @@
 import deviceType from './deviceType';
-import mobileTouch from './mobileTouch';
+import time from './time';
 
-export { deviceType, mobileTouch };
+export { deviceType, time };

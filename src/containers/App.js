@@ -1,27 +1,19 @@
 import * as React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { observer } from 'mobx-react';
 import { Home, Login, Register, About, NotFound } from '../containers';
 import { Header, Sidebar, Footer } from '../components';
-import { observer } from 'mobx-react';
 import { deviceType } from '../stores';
+import $ from 'jquery';
 
-const App = observer(class App extends React.Component {
+const App = observer( class App extends React.Component {
 
   componentWillMount() {
     deviceType.checkDevice();
+    $(window).resize(() => {
+      deviceType.checkDevice();
+    });
   }
-
-  // checkDevice() {
-  //   const filter = ['iphone','ipod','android','blackberry','windows ce','nokia','webos','opera mini','sonyericsson','opera mobi','iemobile'];
-  //   let deviceType = 'PC';
-  //   for(let i=0; i<filter.length; i++) {
-  //     if (navigator.userAgent.toLowerCase().indexOf(filter[i]) !== -1) {
-  //       deviceType = 'MOBILE';
-  //       break;
-  //     }
-  //   }
-  //   return deviceType;
-  // }
 
   render() {
     return (
