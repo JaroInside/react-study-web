@@ -7,10 +7,13 @@ const time = observable({
   time: moment().format('h:mm:ss a'),
   setTime: function() {
     setInterval(() => {
-      const now = moment();
-      this.day = now.format('ddd MMM Do YYYY');
-      this.time = now.format('h:mm:ss a');
+      this.updateTime();
     },1000);
+  },
+  updateTime: function() {
+    const now = moment();
+    this.day = now.format('ddd MMM Do YYYY');
+    this.time = now.format('h:mm:ss a');
   }
 
 });

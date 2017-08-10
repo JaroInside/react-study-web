@@ -1,9 +1,9 @@
 import * as React from 'react';
-import { ImageFigure } from '../components';
+import { ImageFigure, Caption } from '../components';
 import $ from 'jquery';
 import data from '../static/About/data' 
 import { observer } from 'mobx-react';
-import { deviceType } from '../stores';
+import { deviceType, itemClick } from '../stores';
 import { mobileTouch } from '../object';
 
 const About = observer(class About extends React.Component {
@@ -18,36 +18,35 @@ const About = observer(class About extends React.Component {
   }
 
   componentDidUpdate() {
-    console.log('componentDidUpdate');
+    this.unbindPcEvent();
+    this.unbindMobileEvent();
     this.checkDeviceEvent();
   }
 
   checkDeviceEvent() {
-    if(deviceType.device === 'PC') this.pcEvent();
-    else this.mobileEvent();
+    deviceType.device === 'PC' ? this.pcEvent(this) : this.mobileEvent(this);
   }
 
-  pcEvent() {
+  pcEvent(_this) {
     console.log('pcEvent');
-    this.unbindMobileEvent();
     $('figure').hover(
       function(){
         console.log('hoverstart');
+        _this.captionShow(this);
         $(this).siblings().stop().fadeTo(0, 0.5);
-        $(this).children('figcaption').stop().show(0);
-        $(this).click(() => {
+        $(this).unbind('click').click(() => {
           const datalink = $(this).children('img').attr('data-link');
           if(datalink) {
             window.open(datalink,'_blank');
           } else {
             console.log('Not Link');
+            // console.log($(this).children('img').attr('src'));
           }
         });
       },
       function() {
         $(this).siblings().stop().fadeTo(0, 1);
-        $(this).children('figcaption').stop().hide(0);
-        $(this).unbind('click');
+        _this.captionHide();
       }
     );
   }
@@ -56,30 +55,28 @@ const About = observer(class About extends React.Component {
     $('figure').unbind('mouseenter mouseleave');
   }
 
-  // touch이벤트로 바꿀것
-  mobileEvent() {
+  mobileEvent(_this) {
     console.log('mobileEvent');
-    this.unbindPcEvent();
     mobileTouch.mobileTapEvent($('figure'),
       function() {
 
       }, function() {
 
         $(mobileTouch.figure).siblings().stop().fadeTo(0, 1);
-        $(mobileTouch.figure).children('figcaption').stop().hide(0);
+        _this.captionHide();
         mobileTouch.figure = null;
 
-      }, function(e, _self){
+      }, function(e, dom){
         if(mobileTouch.touchStart && !mobileTouch.touchMove) {
           if(mobileTouch.figure === null)  {
-            $(_self).siblings().stop().fadeTo(0, 0.5);
-            $(_self).children('figcaption').stop().show(0);
-            mobileTouch.figure = _self;
-          } else if(mobileTouch.figure === _self) {
+            $(dom).siblings().stop().fadeTo(0, 0.5);
+            _this.captionShow(dom);
+            mobileTouch.figure = dom;
+          } else if(mobileTouch.figure === dom) {
             // 두번째 클릭 이벤트
             $(mobileTouch.figure).siblings().stop().fadeTo(0, 1);
-            $(mobileTouch.figure).children('figcaption').stop().hide(0);
-            const datalink = $(_self).children('img').attr('data-link');
+            _this.captionHide();
+            const datalink = $(dom).children('img').attr('data-link');
             console.log('같은거 터치');
             if(datalink) {
               window.open(datalink,'_blank');
@@ -91,10 +88,9 @@ const About = observer(class About extends React.Component {
           } else {
             // A 클릭했다가 B 클릭
             $(mobileTouch.figure).siblings().stop().fadeTo(0, 1);
-            $(mobileTouch.figure).children('figcaption').stop().hide(0);
-            $(_self).siblings().stop().fadeTo(0, 0.5);
-            $(_self).children('figcaption').stop().show(0);
-            mobileTouch.figure = _self;
+            _this.captionShow(dom);
+            $(dom).siblings().stop().fadeTo(0, 0.5);
+            mobileTouch.figure = dom;
           }
         }
       }
@@ -108,7 +104,7 @@ const About = observer(class About extends React.Component {
       }, function(e){
         if(mobileTouch.touchStart && !mobileTouch.touchMove) {
           $(mobileTouch.figure).siblings().stop().fadeTo(0, 1);
-          $(mobileTouch.figure).children('figcaption').stop().hide(0);
+          _this.captionHide();
           mobileTouch.figure = null;          
         }
       }
@@ -119,10 +115,18 @@ const About = observer(class About extends React.Component {
     $('#root').unbind('touchstart touchmove touchend');
   }
 
+  captionShow(_this) {
+    const caption = $(_this).children('img').attr('data-caption');
+    itemClick.caption = (caption === undefined || caption === '') ? null : caption;
+  }
+
+  captionHide() {
+    itemClick.caption = null;
+  }
+
   render() {
     return (
       <main>
-        <h1 className='device'>{deviceType.device.toLowerCase()}</h1>
         <div className='columns'>
           {data.map((contact, i) => {
             if(data[i].type === 'image') {
@@ -136,6 +140,8 @@ const About = observer(class About extends React.Component {
             }
           })}
         </div>
+        <Caption />
+        <h1 className='device'>connect to {deviceType.device.toLowerCase()}</h1>
       </main>
     );
   }

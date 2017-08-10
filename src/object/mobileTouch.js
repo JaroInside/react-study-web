@@ -5,7 +5,9 @@ const mobileTouch = {
   touchMove: false,
 
   mobileTapEvent: function(_dom,_startEvent, _moveEvent, _endEvent) {
+
     const self = this;
+    
     _dom.unbind('touchstart').bind('touchstart', function(e){
       console.log('touchstart');
       e.stopPropagation();

@@ -5,15 +5,12 @@ const ImageFigure = (props) => {
   
   const data = props.data;
   const img = (data.link) ? 
-      <img src={data.src} data-link={data.link} alt={data.alt} />:
-      <img src={data.src} alt={data.alt} />;
-
-  const caption = (data.figcaption===undefined || data.figcaption==='')? null : <figcaption>{data.figcaption}</figcaption>;
+      <img src={data.src} data-link={data.link} data-caption={data.caption} alt={data.alt} />:
+      <img src={data.src} data-caption={data.caption} alt={data.alt} />;
 
   return (
     <figure>
       {img}
-      {caption}
     </figure>
   );
 }
