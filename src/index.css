@@ -67,6 +67,7 @@ section {
 
 section .sidemenu {
   min-width: 200px;
+  min-height: 300px;
 }
 
 section .sidemenu .clock {
@@ -85,7 +86,7 @@ section nav {
 
 nav ul {
   position: fixed;
-  padding: 0;
+  padding: auto;
 }
 
 nav .navMenu {
@@ -125,6 +126,7 @@ main .device {
 main .working {
   position: relative;
   display: inline-block;
+  top: 20px;
   left: 50%;
   -ms-transform: translate(-50%, 0%);
   -webkit-transform: translate(-50%, 0%);
@@ -279,4 +281,9 @@ li {
     font-size: 1rem;
 
   }
+
+  main .working {
+    top: 0px;
+  }
+
 }

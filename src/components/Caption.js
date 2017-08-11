@@ -1,15 +1,14 @@
 import * as React from 'react';
-import { observer } from 'mobx-react';
-import { itemClick } from '../stores';
+import { observer, inject } from 'mobx-react';
+//import { caption } from '../stores';
 import '../index.css';
 
-const Caption = observer(() => {
-
+const Caption = inject('caption')(observer(({caption}) => {
   return (
     <div className='caption'>
-      {itemClick.caption}
+       {caption.caption} 
     </div>
   );
-});
+}));
 
 export default Caption;

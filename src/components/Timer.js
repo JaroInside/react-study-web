@@ -5,8 +5,6 @@ import '../index.css';
 
 const Timer = observer(() => {
 
-  time.setTime();
-
   return (
     // <div className='clock-circle'>
 		// 	<div className='clock-face'>

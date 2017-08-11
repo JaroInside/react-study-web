@@ -1,13 +1,14 @@
 import { extendObservable } from 'mobx';
 import * as firebase from 'firebase';
+import firebaseconfig from '../config';
 
 const config = {
-  apiKey: "AIzaSyDzzc-aseC_soTs1KCf1UEc2QQbOVNS8ZU",
-  authDomain: "study-firebase-ec464.firebaseapp.com",
-  databaseURL: "https://study-firebase-ec464.firebaseio.com",
-  projectId: "study-firebase-ec464",
-  storageBucket: "study-firebase-ec464.appspot.com",
-  messagingSenderId: "952414646008"
+  apiKey: firebaseconfig.apiKey,
+  authDomain: firebaseconfig.authDomain,
+  databaseURL: firebaseconfig.databaseURL,
+  projectId: firebaseconfig.projectId,
+  storageBucket: firebaseconfig.storageBucket,
+  messagingSenderId: firebaseconfig.messagingSenderId
 };
 firebase.initializeApp(config);
 const db = firebase.database();
@@ -16,7 +17,7 @@ class aboutData {
 
   constructor() {
     extendObservable(this, {
-        data: null
+        data: []
     })
     const ref = db.ref();
     ref.child('About').on('value' , (snapshot) => {
@@ -24,12 +25,15 @@ class aboutData {
       const datas = [];
       if (list !== null) {
         for (const key of Object.keys(list)) {
-          datas.push(list[key]);
+          datas.push({
+            id: key,
+            data: list[key]
+          });
         }
+      } else {
+        console.log('null');
       }
-      console.log(datas);
       this.data = datas;
-      console.log(this.data);
     });
   }
 

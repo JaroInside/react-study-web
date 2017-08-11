@@ -1,3 +1,4 @@
 import mobileTouch from './mobileTouch';
+import deviceType from './deviceType';
 
-export { mobileTouch };
+export { mobileTouch, deviceType };

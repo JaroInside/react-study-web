@@ -1,12 +1,11 @@
 import * as React from 'react';
 import { ImageFigure, Caption } from '../components';
 import $ from 'jquery';
-import data from '../static/About/data' 
-import { observer } from 'mobx-react';
-import { deviceType, itemClick, aboutData } from '../stores';
+import { observer, inject } from 'mobx-react';
+import { caption } from '../stores';
 import { mobileTouch } from '../object';
 
-const About = observer(class About extends React.Component {
+const About = inject("aboutData" , "deviceType")(observer(class About extends React.Component {
 
   componentDidMount() {
     this.checkDeviceEvent();
@@ -17,6 +16,14 @@ const About = observer(class About extends React.Component {
     this.unbindMobileEvent();
   }
 
+  componentWillReact() {
+    console.log('componentWillReact');
+  }
+
+  componentWillUpdate() {
+    console.log('componentWillUpdate');
+  }
+
   componentDidUpdate() {
     this.unbindPcEvent();
     this.unbindMobileEvent();
@@ -24,11 +31,12 @@ const About = observer(class About extends React.Component {
   }
 
   checkDeviceEvent() {
-    deviceType.device === 'PC' ? this.pcEvent(this) : this.mobileEvent(this);
+    // deviceType.device === 'PC' ? this.pcEvent(this) : this.mobileEvent(this);
   }
 
   pcEvent(_this) {
     console.log('pcEvent');
+    this.unbindMobileEvent();
     $('figure').hover(
       function(){
         console.log('hoverstart');
@@ -57,6 +65,7 @@ const About = observer(class About extends React.Component {
 
   mobileEvent(_this) {
     console.log('mobileEvent');
+    this.unbindPcEvent();
     mobileTouch.mobileTapEvent($('figure'),
       function() {
 
@@ -68,6 +77,7 @@ const About = observer(class About extends React.Component {
 
       }, function(e, dom){
         if(mobileTouch.touchStart && !mobileTouch.touchMove) {
+          console.log(mobileTouch.figure);
           if(mobileTouch.figure === null)  {
             $(dom).siblings().stop().fadeTo(0, 0.5);
             _this.captionShow(dom);
@@ -112,40 +122,65 @@ const About = observer(class About extends React.Component {
   }
 
   unbindMobileEvent() {
-    $('#root').unbind('touchstart touchmove touchend');
+    $('#root, figure').unbind('touchstart touchmove touchend');
+    mobileTouch.figure = null;
   }
 
   captionShow(_this) {
-    const caption = $(_this).children('img').attr('data-caption');
-    itemClick.caption = (caption === undefined || caption === '') ? null : caption;
+    const text = $(_this).children('img').attr('data-caption');
+    caption.caption = (text === undefined || text === '') ? null : text;
   }
 
   captionHide() {
-    itemClick.caption = null;
+    caption.caption = null;
+  }
+
+  // 모든 이벤트 해제
+  unbindEvent() {
+
+  }
+  // Pc 이벤트 바인딩
+  bindPcEvent() {
+
+  }
+
+  // pc hover event 함수 작성 - 이벤트 바인딩 전에 unbind도 추가
+  pcHoverEvent(_dom, fn, fn2) {
+  
+  }
+
+  // mobile 이벤트 바인딩
+  bindMobileEvent() {
+
+  }
+
+  // mobile tap event 함수 작성  - 이벤트 바인딩 전에 unbind도 추가
+  mobileTapEvent(_dom, fn, fn2, fn3) {
+
   }
 
   render() {
-    console.log(aboutData);
+    const figures = this.props.aboutData.data;
+    //console.log(this.props.deviceType.device);
     return (
       <main>
         <div className='columns'>
-          {data.map((contact, i) => {
-            if(data[i].type === 'image') {
+          {figures.map((figures) => {
+            if(figures.data.type === 'image') {
               return (
-                <ImageFigure data={data[i]} key={i} />
+                <ImageFigure data={figures.data} key={figures.id} />
               );
             } else {
               return (
-                <ImageFigure data={data[i]} key={i} />
+                <ImageFigure data={figures.data} key={figures.id} />
               );
             }
           })}
         </div>
         <Caption />
-        <h1 className='device'>connect to {deviceType.device.toLowerCase()}</h1>
       </main>
     );
   }
-});
+}));
 
 export default About;

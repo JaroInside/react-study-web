@@ -1,21 +1,43 @@
-import { observable } from 'mobx';
+import { extendObservable } from 'mobx';
 import moment from 'moment';
 
-const time = observable({
+class time {
+  constructor() {
+    extendObservable(this, {
+        day: moment().format('ddd MMM Do YYYY'),
+        time: moment().format('h:mm:ss a')
+    });
+    this.setTime();
+  }
 
-  day: moment().format('ddd MMM Do YYYY'),
-  time: moment().format('h:mm:ss a'),
-  setTime: function() {
+  setTime() {
     setInterval(() => {
       this.updateTime();
     },1000);
-  },
-  updateTime: function() {
+  };
+  updateTime() {
     const now = moment();
     this.day = now.format('ddd MMM Do YYYY');
     this.time = now.format('h:mm:ss a');
-  }
+  };
 
-});
+}
 
-export default time;
+// const time = observable({
+
+//   day: moment().format('ddd MMM Do YYYY'),
+//   time: moment().format('h:mm:ss a'),
+//   setTime: function() {
+//     setInterval(() => {
+//       this.updateTime();
+//     },1000);
+//   },
+//   updateTime: function() {
+//     const now = moment();
+//     this.day = now.format('ddd MMM Do YYYY');
+//     this.time = now.format('h:mm:ss a');
+//   }
+
+// });
+
+export default new time();

@@ -1,18 +1,7 @@
-import { extendObservable } from 'mobx';
-import $ from 'jquery';
+const deviceType = {
 
-class deviceType {
-
-  constructor() {
-    extendObservable(this, {
-        device: 'PC'
-    })
-    this.checkDevice();
-    $(window).resize(() => {
-      this.checkDevice();
-    });
-  }
-  checkDevice() {
+  device: 'PC',
+  checkDevice: function() {
     const filter = ['iphone','ipod','android','blackberry','windows ce','nokia','webos','opera mini','sonyericsson','opera mobi','iemobile'];
     let device = '';
     for(let i=0; i<filter.length; i++) {
@@ -24,9 +13,9 @@ class deviceType {
     if(device === '') {
       device = 'PC';
     }
-    if(this.device !== device) this.device = device;
-  };
+    this.device = device;
+  }
 
-}
+};
 
-export default new deviceType();
+export default deviceType;

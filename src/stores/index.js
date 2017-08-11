@@ -1,7 +1,7 @@
 import deviceType from './deviceType';
 import time from './time';
-import itemClick from './itemClick';
+import caption from './caption';
 
 import aboutData from './aboutData';
 
-export { deviceType, time, itemClick, aboutData };
+export { deviceType, time, caption, aboutData };
