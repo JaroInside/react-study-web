@@ -3,7 +3,7 @@ import { ImageFigure, Caption } from '../components';
 import $ from 'jquery';
 import data from '../static/About/data' 
 import { observer } from 'mobx-react';
-import { deviceType, itemClick } from '../stores';
+import { deviceType, itemClick, aboutData } from '../stores';
 import { mobileTouch } from '../object';
 
 const About = observer(class About extends React.Component {
@@ -125,6 +125,7 @@ const About = observer(class About extends React.Component {
   }
 
   render() {
+    console.log(aboutData);
     return (
       <main>
         <div className='columns'>
