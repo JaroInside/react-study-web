@@ -51,30 +51,24 @@ header li ul {
   display:flex;
 }
 
-.content nav{
-  border-right:1px solid gray;
-}
-
-nav {
-  flex-basis: auto;
-  flex-shrink: 0;
-}
-
 section {
   display:flex;
   margin-bottom: 20px;
 }
 
-section .sidemenu {
+nav {
+  flex-basis: auto;
+  flex-shrink: 0;
   min-width: 200px;
   min-height: 300px;
+  border-right:1px solid gray;
 }
 
-section .sidemenu .clock {
+nav .clock {
   margin-top: 20px;
 }
 
-section .sidemenu .digital-clock {
+nav .digital-clock {
   font-family: 'liquid_crystalregular', sans-serif;
   font-size: 1rem;
 }
@@ -228,7 +222,7 @@ li {
     position: fixed;
     top: 0px;
     padding: 0;
-    width: 320px;
+    width: 90%;
     background-color: white;
   }
 
@@ -244,16 +238,32 @@ li {
     margin-top: 10px;
     margin-left: -45px;
   }
-  
-  section {
-    margin-top: 70px;
+
+  .content {
+    display: inline;
   }
 
   nav {
-    display:none;
+    position: fixed;
+    top: 64px;
+    left: 100%;
+    background-color: black;
+    color: white;
+    width: 100%;
+    height: 100%;
+    min-width: 200px;
+    min-height: 300px;
+    z-index: 500;
+    /* display:none; */
+  }
+
+  nav ul {
+    position: static;
+    padding: auto;
   }
 
   section main {
+    margin-top: 60px;
     padding: 0px;
   }
 
@@ -277,13 +287,28 @@ li {
     padding-bottom: 3px;
   }
 
-  .brand-logo {
-    font-size: 1rem;
-
-  }
-
   main .working {
     top: 0px;
   }
 
+  .sideLink:link { color: white; text-decoration: none;}
+  .sideLink:visited { color: white; text-decoration: none;}
+  .sideLink:hover { color: grey; text-decoration: none;}
+
+}
+
+
+/* Mobile Device */
+@media screen and (max-width : 767px) {
+ 
+}
+ 
+/* Tablet Device */
+@media screen and (min-width : 768px) and (max-width : 991px) {
+ 
+}
+ 
+/* Desktop Device */
+@media screen and (min-width : 992px) {
+ 
 }

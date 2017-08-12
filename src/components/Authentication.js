@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
 class Authentication extends React.Component {
   render() {
@@ -10,14 +9,5 @@ class Authentication extends React.Component {
     );
   }
 }
-
-Authentication.propTypes = {
-    mode: PropTypes.bool,
-};
-
-Authentication.defaultProps = {
-    mode: true,
-};
-
 
 export default Authentication;

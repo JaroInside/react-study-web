@@ -7,8 +7,8 @@ const Sidebar = () => {
   return (
     <nav className='sidemenu'>
       <ul>
-        <li className='navMenu'><Link to="/">Home</Link></li>
-        <li className='navMenu'><Link to="/About">About</Link></li>
+        <li className='navMenu'><Link className='sideLink' to="/">Home</Link></li>
+        <li className='navMenu'><Link className='sideLink' to="/About">About</Link></li>
         <Timer />
       </ul>
     </nav>

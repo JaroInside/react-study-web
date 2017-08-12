@@ -3,17 +3,25 @@ import { ImageFigure, Caption } from '../components';
 import $ from 'jquery';
 import { observer, inject } from 'mobx-react';
 import { caption } from '../stores';
-import { mobileTouch } from '../object';
 
 const About = inject("aboutData" , "deviceType")(observer(class About extends React.Component {
 
+  constructor() {
+    console.log('constructor');
+    super();
+    this.figureDom = null;
+    this.touchStart = false;
+    this.touchMove = false;
+  }
+
   componentDidMount() {
+    // 이벤트 바인딩
+    console.log('componentDidMount');
     this.checkDeviceEvent();
   }
 
   componentWillUnmount() {
-    this.unbindPcEvent();
-    this.unbindMobileEvent();
+    console.log('componentWillUnmount');
   }
 
   componentWillReact() {
@@ -25,25 +33,27 @@ const About = inject("aboutData" , "deviceType")(observer(class About extends Re
   }
 
   componentDidUpdate() {
-    this.unbindPcEvent();
-    this.unbindMobileEvent();
+    console.log('componentDidUpdate');
     this.checkDeviceEvent();
   }
 
   checkDeviceEvent() {
-    // deviceType.device === 'PC' ? this.pcEvent(this) : this.mobileEvent(this);
+    this.props.deviceType.device === 'PC' ? this.pcEvent() : this.mobileEvent();
   }
 
-  pcEvent(_this) {
+  // PC Event. Hover 를 바인딩 하기 전에 안전장치로 언바인드 해준다.
+  pcEvent() {
     console.log('pcEvent');
-    this.unbindMobileEvent();
-    $('figure').hover(
-      function(){
-        console.log('hoverstart');
-        _this.captionShow(this);
-        $(this).siblings().stop().fadeTo(0, 0.5);
-        $(this).unbind('click').click(() => {
-          const datalink = $(this).children('img').attr('data-link');
+    $('figure').unbind('mouseenter mouseleave')
+    .hover(
+      (e) => {
+        console.log('Hover Start');
+        e.stopPropagation();
+        const dom = e.currentTarget;
+        this.captionShow(dom);
+        $(dom).siblings().stop().fadeTo(0, 0.5);
+        $(dom).unbind('click').click(() => {
+          const datalink = $(dom).children('img').attr('data-link');
           if(datalink) {
             window.open(datalink,'_blank');
           } else {
@@ -51,10 +61,13 @@ const About = inject("aboutData" , "deviceType")(observer(class About extends Re
             // console.log($(this).children('img').attr('src'));
           }
         });
-      },
-      function() {
-        $(this).siblings().stop().fadeTo(0, 1);
-        _this.captionHide();
+      } , 
+      (e) => {
+        console.log('Hover End');
+        e.stopPropagation();
+        const dom = e.currentTarget;
+        this.captionHide();
+        $(dom).siblings().stop().fadeTo(0, 1);
       }
     );
   }
@@ -63,67 +76,65 @@ const About = inject("aboutData" , "deviceType")(observer(class About extends Re
     $('figure').unbind('mouseenter mouseleave');
   }
 
-  mobileEvent(_this) {
-    console.log('mobileEvent');
-    this.unbindPcEvent();
-    mobileTouch.mobileTapEvent($('figure'),
-      function() {
+  mobileEvent() {
 
-      }, function() {
-
-        $(mobileTouch.figure).siblings().stop().fadeTo(0, 1);
-        _this.captionHide();
-        mobileTouch.figure = null;
-
-      }, function(e, dom){
-        if(mobileTouch.touchStart && !mobileTouch.touchMove) {
-          console.log(mobileTouch.figure);
-          if(mobileTouch.figure === null)  {
-            $(dom).siblings().stop().fadeTo(0, 0.5);
-            _this.captionShow(dom);
-            mobileTouch.figure = dom;
-          } else if(mobileTouch.figure === dom) {
-            // 두번째 클릭 이벤트
-            $(mobileTouch.figure).siblings().stop().fadeTo(0, 1);
-            _this.captionHide();
-            const datalink = $(dom).children('img').attr('data-link');
-            console.log('같은거 터치');
-            if(datalink) {
-              window.open(datalink,'_blank');
-            } else {
-              console.log('Not Link');
-            }
-            mobileTouch.figure = null;
-            
+    $('figure').unbind('touchstart touchmove touchend')
+    .bind('touchstart', (e) => {
+      console.log('Touch Start');
+      e.stopPropagation();      
+      this.touchStart = true;
+    })
+    .bind('touchmove', (e) => {
+      console.log('Touch Move');
+      e.stopPropagation();
+      if(!this.touchStart) {
+        return;
+      }
+      if(this.figureDom !== null) {
+        this.captionHide();
+        $(this.figureDom).siblings().stop().fadeTo(0, 1);
+        this.figureDom = null;
+      }
+      this.touchMove = true;
+    })
+    .bind('touchend', (e) => {
+      console.log('Touch End');
+      e.stopPropagation();
+      const dom = e.currentTarget;
+      if(this.touchStart && !this.touchMove) {
+        if(this.figureDom === null)  {
+          this.captionShow(dom);
+          $(dom).siblings().stop().fadeTo(0, 0.5);
+          this.figureDom = dom;
+        } else if(this.figureDom === dom) {
+          // // 두번째 클릭 이벤트
+          this.captionHide();
+          $(this.figureDom).siblings().stop().fadeTo(0, 1);
+          const datalink = $(dom).children('img').attr('data-link');
+          console.log('같은거 터치');
+          if(datalink) {
+            window.open(datalink,'_blank');
           } else {
-            // A 클릭했다가 B 클릭
-            $(mobileTouch.figure).siblings().stop().fadeTo(0, 1);
-            _this.captionShow(dom);
-            $(dom).siblings().stop().fadeTo(0, 0.5);
-            mobileTouch.figure = dom;
+            console.log('Not Link');
           }
+          this.figureDom = null;
+        } else {
+          // A 클릭했다가 B 클릭
+          this.captionShow(dom);
+          $(this.figureDom).siblings().stop().fadeTo(0, 1);
+          $(dom).siblings().stop().fadeTo(0, 0.5);
+          this.figureDom = dom;
         }
       }
-    );
+      this.touchStart = false;
+      this.touchMove = false;
+    });
 
-    mobileTouch.mobileTapEvent($('#root').not('figure'), 
-      function() {
-
-      }, function() {
-
-      }, function(e){
-        if(mobileTouch.touchStart && !mobileTouch.touchMove) {
-          $(mobileTouch.figure).siblings().stop().fadeTo(0, 1);
-          _this.captionHide();
-          mobileTouch.figure = null;          
-        }
-      }
-    );
   }
 
   unbindMobileEvent() {
     $('#root, figure').unbind('touchstart touchmove touchend');
-    mobileTouch.figure = null;
+    this.figureDom = null;
   }
 
   captionShow(_this) {
@@ -135,33 +146,8 @@ const About = inject("aboutData" , "deviceType")(observer(class About extends Re
     caption.caption = null;
   }
 
-  // 모든 이벤트 해제
-  unbindEvent() {
-
-  }
-  // Pc 이벤트 바인딩
-  bindPcEvent() {
-
-  }
-
-  // pc hover event 함수 작성 - 이벤트 바인딩 전에 unbind도 추가
-  pcHoverEvent(_dom, fn, fn2) {
-  
-  }
-
-  // mobile 이벤트 바인딩
-  bindMobileEvent() {
-
-  }
-
-  // mobile tap event 함수 작성  - 이벤트 바인딩 전에 unbind도 추가
-  mobileTapEvent(_dom, fn, fn2, fn3) {
-
-  }
-
   render() {
     const figures = this.props.aboutData.data;
-    //console.log(this.props.deviceType.device);
     return (
       <main>
         <div className='columns'>
