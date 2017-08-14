@@ -6,16 +6,9 @@ import '../index.css';
 const Timer = observer(() => {
 
   return (
-    // <div className='clock-circle'>
-		// 	<div className='clock-face'>
-		// 		<div id='hour' className='hero-hour'></div>
-		// 		<div id='minute' className='hero-minute'></div>
-		// 		<div id='second' className='hero-second'></div>
-		// 	</div>
-    // </div>
     <div className='clock'>
-      <div className='digital-clock'>{time.day}</div>
-      <div className='digital-clock'>{time.time}</div>
+      <div>{time.day}</div>
+      <div>{time.time}</div>
     </div>
   );
 })

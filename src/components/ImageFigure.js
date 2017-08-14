@@ -5,8 +5,8 @@ const ImageFigure = (props) => {
   
   const data = props.data;
   const img = (data.link) ? 
-      <img src={data.src} data-link={data.link} data-caption={data.caption} alt={data.alt} />:
-      <img src={data.src} data-caption={data.caption} alt={data.alt} />;
+      <img className='figureItem' src={data.src} data-link={data.link} data-caption={data.caption} alt={data.alt} />:
+      <img className='figureItem' src={data.src} data-caption={data.caption} alt={data.alt} />;
 
   return (
     <figure>
