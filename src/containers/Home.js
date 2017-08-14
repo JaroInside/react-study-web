@@ -1,26 +1,8 @@
 import * as React from 'react';
-import { observer, inject } from 'mobx-react';
-import $ from 'jquery';
+import { observer } from 'mobx-react';
+import { mobileEvent } from '../event';
 
-const Home = inject("deviceType")(observer(class About extends React.Component {
-
-  constructor() {
-    console.log('constructor');
-    super();
-    this.setValue();
-  }
-
-  setValue() {
-    this.touchStart = false;
-    this.touchMove = false;
-    this.navState = false;
-  }
-
-  setDom() {
-    $('nav').stop().css({
-      left: '100%'
-    });
-  }
+const Home = observer(class About extends React.Component {
 
   componentDidMount() {
     // 이벤트 바인딩
@@ -30,8 +12,6 @@ const Home = inject("deviceType")(observer(class About extends React.Component {
 
   componentWillUnmount() {
     console.log('componentWillUnmount');
-    this.setValue();
-    this.setDom();
   }
 
   componentWillReact() {
@@ -48,49 +28,15 @@ const Home = inject("deviceType")(observer(class About extends React.Component {
   }
 
   checkDeviceEvent() {
-    this.props.deviceType.device === 'PC' ? this.pcEvent() : this.mobileEvent();
+    this.props.deviceType === 'PC' ? this.pcEventBind() : this.mobileEvent();
   }
 
   pcEvent() {
     console.log('pcEvent');
   }
 
-  unbindPcEvent() {
-  }
-
   mobileEvent() {
-    $('.dropdown-menu').unbind('touchstart touchmove touchend')
-    .bind('touchstart', (e) => {
-      console.log('Touch Start');
-      e.stopPropagation();      
-      this.touchStart = true;
-    })
-    .bind('touchmove', (e) => {
-      console.log('Touch Move');
-      e.stopPropagation();
-      if(!this.touchStart) {
-        return;
-      }
-      this.touchMove = true;
-    })
-    .bind('touchend', (e) => {
-      console.log('Touch End');
-      e.stopPropagation();
-      if(this.touchStart && !this.touchMove) {
-        let changeLeftValue = (this.navState) ? 100 : 0;
-        this.navState = !this.navState;
-        $('nav').stop().animate({
-          left: `${changeLeftValue}%`
-        },1000);
-      }
-      this.touchStart = false;
-      this.touchMove = false;
-    });
-
-  }
-
-  unbindMobileEvent() {
-    $('.dropdown-menu').unbind('touchstart touchmove touchend');
+    mobileEvent.setPageContext(this);
   }
 
   render() {
@@ -105,6 +51,6 @@ const Home = inject("deviceType")(observer(class About extends React.Component {
       </main>
     );
   }
-}));
+});
 
 export default Home;

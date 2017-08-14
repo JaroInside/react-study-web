@@ -3,30 +3,22 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { observer } from 'mobx-react';
 import { Home, Login, Register, About, NotFound } from '../containers';
 import { Header, Sidebar, Footer } from '../components';
-// import { deviceType } from '../stores';
-// import $ from 'jquery';
 
 const App = observer( class App extends React.Component {
-
-  // componentWillMount() {
-  //   deviceType.checkDevice();
-  //   $(window).resize(() => {
-  //     deviceType.checkDevice();
-  //   });
-  // }
   
   render() {
+    const deviceType = this.props.deviceType.device;
     return (
       <Router>
         <div className='container'>
-          <Header />
+          <Header deviceType={deviceType}/>
           <section className='content'>
             <Sidebar />
             <Switch>
-              <Route exact={true} path='/' component={Home}/>
-              <Route path='/About' component={About} />
-              <Route path='/login' component={Login}/>
-              <Route path='/register' component={Register}/>
+              <Route exact={true} path='/' component={ (props) => <Home {...props} deviceType={deviceType} />}/>
+              <Route path='/About' component={ (props) => <About {...props} deviceType={deviceType} />}/>
+              <Route path='/login' component={Login} />
+              <Route path='/register' component={Register} />
               <Route component={NotFound} />
             </Switch>
           </section>

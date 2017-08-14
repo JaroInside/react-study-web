@@ -1,9 +1,19 @@
 import $ from 'jquery';
+import { caption } from '../stores';
 
 class pcEvent {
 
-  figureHoverEvent(_this) {
-    console.log(_this.props.location.pathname);
+  constructor() {
+    this.pageContext = null;
+  }
+
+  setPageContext(_this) {
+    $('figure').unbind('mouseenter mouseleave');
+    this.pageContext = _this;
+    console.log(this.pageContext.props.location.pathname);
+  }
+
+  figureHoverEvent() {
     $('figure').unbind('mouseenter mouseleave')
     .hover(
       (e) => {
@@ -12,7 +22,7 @@ class pcEvent {
         const dom = e.currentTarget;
         const childrenDom = $(dom).children();
         if(childrenDom.is('video')) $(dom).children('video').get(0).play();
-        _this.captionShow(dom);
+        this.captionShow(dom);
         $(dom).siblings().stop().fadeTo(0, 0.5);
         $(dom).unbind('click').click(() => {
           const datalink = childrenDom.is('img') ? $(dom).children('img').attr('data-link') : $(dom).children('video').attr('data-link');
@@ -27,11 +37,23 @@ class pcEvent {
           $(dom).children('video').get(0).currentTime = 0;
           $(dom).children('video').get(0).pause();
         }
-        _this.captionHide();
+        this.captionHide();
         $(dom).siblings().stop().fadeTo(0, 1);
       }
     );
   }
+
+  captionShow(_dom) {
+    const text = ($(_dom).children().is('video')) ? 
+      $(_dom).children('video').attr('data-caption') 
+    : $(_dom).children('img').attr('data-caption');
+    caption.text = (text === undefined || text === '') ? null : text;
+  }
+
+  captionHide() {
+    caption.text = null;
+  }
+
 }
 
 export default new pcEvent();

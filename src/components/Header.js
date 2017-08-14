@@ -1,12 +1,16 @@
 import * as React from 'react';
 import { Link } from 'react-router-dom';
 import { Caption } from '.';
+import { mobileEvent } from '../event';
 import '../index.css';
 
 class Header extends React.Component {
 
   componentDidMount() {
-
+    const deviceType = this.props.deviceType;
+    if(deviceType === 'MOBILE') {
+      mobileEvent.mobileDropMenuEvent();
+    }
   }
 
   componentWillUnmount() {
