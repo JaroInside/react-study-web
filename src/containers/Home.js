@@ -28,14 +28,14 @@ const Home = observer(class About extends React.Component {
   }
 
   checkDeviceEvent() {
-    this.props.deviceType === 'PC' ? this.pcEventBind() : this.mobileEvent();
+    this.props.deviceType === 'PC' ? this.pcEventBind() : this.mobileEventBind();
   }
 
-  pcEvent() {
+  pcEventBind() {
     console.log('pcEvent');
   }
 
-  mobileEvent() {
+  mobileEventBind() {
     mobileEvent.setPageContext(this);
   }
 
@@ -46,7 +46,7 @@ const Home = observer(class About extends React.Component {
           <div className="fa fa-wrench fa-4x working-icon" aria-hidden="true"></div>
           <h2>작업중인 홈페이지입니다. <br/> 스터디 용도입니다.</h2>
           <h3>현재 사용기술</h3>
-          <h3>React, Mobx, Jquery</h3>
+          <h3>React, Mobx, Jquery, FireBase</h3>
         </div>
       </main>
     );

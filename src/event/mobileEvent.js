@@ -1,4 +1,5 @@
 import $ from 'jquery';
+import moment from 'moment';
 import { caption } from '../stores';
 
 class mobileEvent {
@@ -10,6 +11,19 @@ class mobileEvent {
     this.touchMove = false;
     this.navState = false;
     this.navMenuTime = 500;
+
+    this.swipe = false;
+    this.startSwipePoint = {
+      X: null,
+      Y: null
+    };
+    this.moveSwipePoint = {
+      X: null,
+      Y: null
+    }
+
+    this.startSwipeTime = null;
+    this.endSwipeTime = null;
   }
 
   setPageContext(_this) {
@@ -26,7 +40,7 @@ class mobileEvent {
     $('figure').unbind('touchstart touchmove touchend')
     .bind('touchstart', (e) => {
       console.log('Figure Touch Start');
-      e.stopPropagation();      
+      e.stopPropagation();
       this.touchStart = true;
     })
     .bind('touchmove', (e) => {
@@ -37,10 +51,7 @@ class mobileEvent {
       }
       if(this.figureDom !== null) {
         this.captionHide();
-        if($(this.figureDom).children().is('video')) {
-          $(this.figureDom).children('video').get(0).currentTime = 0;
-          $(this.figureDom).children('video').get(0).pause();
-        }
+        this.figureVideoPause(this.figureDom);
         $(this.figureDom).siblings().stop().fadeTo(0, 1);
         this.figureDom = null;
       }
@@ -53,22 +64,20 @@ class mobileEvent {
         return;
       }
       const dom = e.currentTarget;
-      const childrenDom = $(dom).children();
       if(this.touchStart && !this.touchMove) {
         if(this.figureDom === null)  {
-          this.captionShow(dom);
-          if(childrenDom.is('video')) $(dom).children('video').get(0).play();
-          $(dom).siblings().stop().fadeTo(0, 0.5);
           this.figureDom = dom;
+          this.captionShow(this.figureDom);
+          this.figureVideoPlay(this.figureDom);
+          $(this.figureDom).siblings().stop().fadeTo(0, 0.5);
         } else if(this.figureDom === dom) {
           // // 두번째 클릭 이벤트
           this.captionHide();
-          if(childrenDom.is('video')) {
-            $(dom).children('video').get(0).currentTime = 0;
-            $(dom).children('video').get(0).pause();
-          }
+          this.figureVideoPause(this.figureDom);
           $(this.figureDom).siblings().stop().fadeTo(0, 1);
-          const datalink = childrenDom.is('img') ? $(dom).children('img').attr('data-link') : $(dom).children('video').attr('data-link');
+          const datalink = $(this.figureDom).children().is('img') ? 
+                              $(this.figureDom).children('img').attr('data-link') : 
+                              $(this.figureDom).children('video').attr('data-link');
           console.log('같은거 터치');
           if(datalink) {
             window.open(datalink,'_blank');
@@ -78,15 +87,12 @@ class mobileEvent {
           this.figureDom = null;
         } else {
           // A 클릭했다가 B 클릭
-          this.captionShow(dom);
-          if($(this.figureDom).children().is('video')) {
-            $(this.figureDom).children('video').get(0).currentTime = 0;
-            $(this.figureDom).children('video').get(0).pause();
-          }
+          this.figureVideoPause(this.figureDom);
           $(this.figureDom).siblings().stop().fadeTo(0, 1);
-          if(childrenDom.is('video')) $(dom).children('video').get(0).play();
-          $(dom).siblings().stop().fadeTo(0, 0.5);
           this.figureDom = dom;
+          this.captionShow(this.figureDom);
+          this.figureVideoPlay(this.figureDom);
+          $(this.figureDom).siblings().stop().fadeTo(0, 0.5);
         }
         console.log('무브가 일어나지 않은 터치');
       } else {
@@ -125,6 +131,7 @@ class mobileEvent {
       }
       if(this.touchStart && !this.touchMove) {
         this.captionHide();
+        this.figureVideoPause(this.figureDom);
         $(this.figureDom).siblings().stop().fadeTo(0, 1);
         this.figureDom = null;
         console.log('무브가 일어나지 않은 터치');
@@ -175,6 +182,66 @@ class mobileEvent {
       this.touchStart = false;
       this.touchMove = false;
     });
+  }
+
+  mobileSwipeEvent() {
+    $('figure')
+    .bind('touchstart', (e) => {
+      console.log('Figure Touch Start');
+      e.stopPropagation();
+      this.startSwipeTime = moment();
+      this.startSwipePoint.X = e.targetTouches[0].pageX;
+      this.startSwipePoint.Y = e.targetTouches[0].pageY;
+      this.moveSwipePoint.X = e.targetTouches[0].pageX;
+      this.moveSwipePoint.Y = e.targetTouches[0].pageY;
+      this.touchStart = true;
+    })
+    .bind('touchmove', (e) => {
+      console.log('Figure Touch Move');
+      e.stopPropagation();
+      if(!this.touchStart) {
+        return;
+      }
+      const nowX = e.targetTouches[0].pageX;
+      const nowY = e.targetTouches[0].pageY;
+
+      const startDist = Math.sqrt( ((nowX - this.startSwipePoint.X) ** 2) + ( (nowY - this.startSwipePoint.Y) ** 2 ) );
+      let angle = (180 / Math.PI) * Math.atan2((nowX - this.startSwipePoint.X), (nowY - this.startSwipePoint.Y));
+      angle = angle < 0 ? 360 + angle : angle;
+
+      this.touchMove = true;
+
+    })
+    .bind('touchend', (e) => {
+      console.log('Figure Touch End');
+      this.endSwipeTime = moment();
+      if(this.endSwipeTime.diff(this.startSwipeTime, 'millesecond') > 500) this.swipe = false;
+      console.log(this.endSwipeTime.diff(this.startSwipeTime, 'millesecond'));
+      e.stopPropagation();
+      if(!this.touchStart) {
+        return;
+      }
+      if(this.touchStart && !this.touchMove) {
+        console.log('무브가 일어나지 않은 터치');
+      } else {
+        console.log('무브가 일어난 터치');
+        if(this.swipe) console.log('스와이프 일어남');
+      }
+      
+      this.touchStart = false;
+      this.touchMove = false;
+    });
+  }
+
+  figureVideoPlay(_dom) {
+    if($(_dom).children().is('video')) $(_dom).children('video').get(0).play();
+  }
+
+  figureVideoPause(_dom) {
+    if($(_dom).children().is('video')) {
+      $(_dom).children('video').get(0).currentTime = 0;
+      $(_dom).children('video').get(0).pause();
+    }
   }
 
   captionShow(_dom) {

@@ -30,7 +30,7 @@ const About = inject("aboutData")(observer(class About extends React.Component {
   }
 
   checkDeviceEvent() {
-    this.props.deviceType === 'PC' ? this.pcEventBind() : this.mobileEvent();
+    this.props.deviceType === 'PC' ? this.pcEventBind() : this.mobileEventBind();
   }
 
   // PC Event. Hover 를 바인딩 하기 전에 안전장치로 언바인드 해준다.
@@ -40,7 +40,7 @@ const About = inject("aboutData")(observer(class About extends React.Component {
     pcEvent.figureHoverEvent();
   }
 
-  mobileEvent() {
+  mobileEventBind() {
     mobileEvent.setPageContext(this);
     mobileEvent.mobileFigureEvent();
     mobileEvent.mobileRootEvent();
