@@ -12,7 +12,7 @@ class mobileEvent {
     this.navState = false;
     this.navMenuTime = 500;
 
-    this.swipe = false;
+    this.swipe = null;
     this.startSwipePoint = {
       X: null,
       Y: null
@@ -24,7 +24,7 @@ class mobileEvent {
 
     this.startSwipeTime = null;
     this.endSwipeTime = null;
-  }
+  };
 
   setPageContext(_this) {
     $('#root, figure').unbind('touchstart touchmove touchend');
@@ -36,66 +36,36 @@ class mobileEvent {
     console.log(this.pageContext.props.location.pathname);
   }
 
-  mobileFigureEvent() {
-    $('figure').unbind('touchstart touchmove touchend')
-    .bind('touchstart', (e) => {
-      console.log('Figure Touch Start');
+  tapEvent(_event) { 
+    $.event.special.test = {};
+    console.log($.event);
+    $(_event.dom).unbind('touchstart touchmove touchend')
+    .bind('touchstart' , (e) => {
+      console.log('Touch Start');
       e.stopPropagation();
+      _event.start(this, e);
       this.touchStart = true;
     })
-    .bind('touchmove', (e) => {
-      console.log('Figure Touch Move');
+    .bind('touchmove' , (e) => {
+      console.log('Touch Move');
       e.stopPropagation();
       if(!this.touchStart) {
         return;
       }
-      if(this.figureDom !== null) {
-        this.captionHide();
-        this.figureVideoPause(this.figureDom);
-        $(this.figureDom).siblings().stop().fadeTo(0, 1);
-        this.figureDom = null;
-      }
+      _event.move(this, e);
       this.touchMove = true;
     })
-    .bind('touchend', (e) => {
-      console.log('Figure Touch End');
+    .bind('touchend' , (e) => {
+      console.log('Touch End');
       e.stopPropagation();
       if(!this.touchStart) {
         return;
       }
-      const dom = e.currentTarget;
       if(this.touchStart && !this.touchMove) {
-        if(this.figureDom === null)  {
-          this.figureDom = dom;
-          this.captionShow(this.figureDom);
-          this.figureVideoPlay(this.figureDom);
-          $(this.figureDom).siblings().stop().fadeTo(0, 0.5);
-        } else if(this.figureDom === dom) {
-          // // 두번째 클릭 이벤트
-          this.captionHide();
-          this.figureVideoPause(this.figureDom);
-          $(this.figureDom).siblings().stop().fadeTo(0, 1);
-          const datalink = $(this.figureDom).children().is('img') ? 
-                              $(this.figureDom).children('img').attr('data-link') : 
-                              $(this.figureDom).children('video').attr('data-link');
-          console.log('같은거 터치');
-          if(datalink) {
-            window.open(datalink,'_blank');
-          } else {
-            console.log('Not Link');
-          }
-          this.figureDom = null;
-        } else {
-          // A 클릭했다가 B 클릭
-          this.figureVideoPause(this.figureDom);
-          $(this.figureDom).siblings().stop().fadeTo(0, 1);
-          this.figureDom = dom;
-          this.captionShow(this.figureDom);
-          this.figureVideoPlay(this.figureDom);
-          $(this.figureDom).siblings().stop().fadeTo(0, 0.5);
-        }
+        _event.end_notMove(this, e);
         console.log('무브가 일어나지 않은 터치');
       } else {
+        _event.end_move(this, e);
         console.log('무브가 일어난 터치');
       }
       this.touchStart = false;
@@ -103,134 +73,184 @@ class mobileEvent {
     });
   }
 
-  mobileRootEvent() {
-    $('#root').unbind('touchstart touchmove touchend')
-    .bind('touchstart', (e) => {
-      console.log('Touch Start');
-      e.stopPropagation();      
-      this.touchStart = true;
-    })
-    .bind('touchmove', (e) => {
-      console.log('Touch Move');
-      e.stopPropagation();
-      if(!this.touchStart) {
-        return;
-      }
-      if(this.figureDom !== null) {
-        this.captionHide();
-        $(this.figureDom).siblings().stop().fadeTo(0, 1);
-        this.figureDom = null;
-      }
-      this.touchMove = true;
-    })
-    .bind('touchend', (e) => {
-      console.log('Touch End');
-      e.stopPropagation();
-      if(!this.touchStart) {
-        return;
-      }
-      if(this.touchStart && !this.touchMove) {
-        this.captionHide();
-        this.figureVideoPause(this.figureDom);
-        $(this.figureDom).siblings().stop().fadeTo(0, 1);
-        this.figureDom = null;
-        console.log('무브가 일어나지 않은 터치');
-      } else {
-        console.log('무브가 일어난 터치');
-      }
-      this.touchStart = false;
-      this.touchMove = false;
-    });
-  }
-
-  mobileDropMenuEvent() {
-    $('.dropdown-menu').unbind('touchstart touchmove touchend')
-    .bind('touchstart', (e) => {
-      console.log('Touch Start');
-      e.stopPropagation();      
-      this.touchStart = true;
-    })
-    .bind('touchmove', (e) => {
-      console.log('Touch Move');
-      e.stopPropagation();
-      if(!this.touchStart) {
-        return;
-      }
-      if(this.figureDom !== null) {
-        this.captionHide();
-        $(this.figureDom).siblings().stop().fadeTo(0, 1);
-        this.figureDom = null;
-      }
-      this.touchMove = true;
-    })
-    .bind('touchend', (e) => {
-      console.log('Touch End');
-      e.stopPropagation();
-      if(!this.touchStart) {
-        return;
-      }
-      if(this.touchStart && !this.touchMove) {
-        this.captionHide();
-        $(this.figureDom).siblings().stop().fadeTo(0, 1);
-        this.figureDom = null;
-        let changeLeftValue = (this.navState) ? 100 : 0;
-        this.navState = !this.navState;
-        $('nav').stop().animate({
-          left: `${changeLeftValue}%`
-        },this.navMenuTime);
-      }
-      this.touchStart = false;
-      this.touchMove = false;
-    });
-  }
-
-  mobileSwipeEvent() {
-    $('figure')
-    .bind('touchstart', (e) => {
-      console.log('Figure Touch Start');
-      e.stopPropagation();
-      this.startSwipeTime = moment();
-      this.startSwipePoint.X = e.targetTouches[0].pageX;
-      this.startSwipePoint.Y = e.targetTouches[0].pageY;
-      this.moveSwipePoint.X = e.targetTouches[0].pageX;
-      this.moveSwipePoint.Y = e.targetTouches[0].pageY;
-      this.touchStart = true;
-    })
-    .bind('touchmove', (e) => {
-      console.log('Figure Touch Move');
-      e.stopPropagation();
-      if(!this.touchStart) {
-        return;
+  setFigureEvent() {
+    const event = {
+      dom: 'figure',
+      start: function(_this, e) {},
+      move: function(_this, e) {},
+      end_notMove: function(_this, e) {},
+      end_move: function(_this, e) {}
+    };
+    event.start = function(_this, e) {
+      _this.startSwipeTime = moment();
+      _this.startSwipePoint.X = e.targetTouches[0].pageX;
+      _this.startSwipePoint.Y = e.targetTouches[0].pageY;
+      _this.moveSwipePoint.X = e.targetTouches[0].pageX;
+      _this.moveSwipePoint.Y = e.targetTouches[0].pageY;
+      _this.swipe = true;
+    };
+    event.move = function(_this, e) {
+      if(_this.figureDom !== null) {
+        _this.captionHide();
+        _this.figureVideoPause(_this.figureDom);
+        $(_this.figureDom).siblings().stop().fadeTo(0, 1);
+        _this.figureDom = null;
       }
       const nowX = e.targetTouches[0].pageX;
       const nowY = e.targetTouches[0].pageY;
-
-      const startDist = Math.sqrt( ((nowX - this.startSwipePoint.X) ** 2) + ( (nowY - this.startSwipePoint.Y) ** 2 ) );
-      let angle = (180 / Math.PI) * Math.atan2((nowX - this.startSwipePoint.X), (nowY - this.startSwipePoint.Y));
+      let angle = (180 / Math.PI) * Math.atan2((nowX - _this.moveSwipePoint.X), (nowY - _this.moveSwipePoint.Y));
       angle = angle < 0 ? 360 + angle : angle;
-
-      this.touchMove = true;
-
-    })
-    .bind('touchend', (e) => {
-      console.log('Figure Touch End');
-      this.endSwipeTime = moment();
-      if(this.endSwipeTime.diff(this.startSwipeTime, 'millesecond') > 500) this.swipe = false;
-      console.log(this.endSwipeTime.diff(this.startSwipeTime, 'millesecond'));
-      e.stopPropagation();
-      if(!this.touchStart) {
-        return;
-      }
-      if(this.touchStart && !this.touchMove) {
-        console.log('무브가 일어나지 않은 터치');
+      _this.swipe = (_this.swipe && (angle >= 260 && angle <= 280));
+      _this.moveSwipePoint.X = nowX;
+      _this.moveSwipePoint.Y = nowY;
+    };
+    event.end_notMove = function(_this, e) {
+      if(_this.figureDom === null)  {
+        _this.figureDom = e.currentTarget;
+        _this.captionShow(_this.figureDom);
+        _this.figureVideoPlay(_this.figureDom);
+        $(_this.figureDom).siblings().stop().fadeTo(0, 0.5);
+      } else if(_this.figureDom === e.currentTarget) {
+        // // 두번째 클릭 이벤트
+        _this.captionHide();
+        _this.figureVideoPause(_this.figureDom);
+        $(_this.figureDom).siblings().stop().fadeTo(0, 1);
+        const datalink = $(_this.figureDom).children().is('img') ? 
+                            $(_this.figureDom).children('img').attr('data-link') : 
+                            $(_this.figureDom).children('video').attr('data-link');
+        console.log('같은거 터치');
+        if(datalink) {
+          window.open(datalink,'_blank');
+        } else {
+          console.log('Not Link');
+        }
+        _this.figureDom = null;
       } else {
-        console.log('무브가 일어난 터치');
-        if(this.swipe) console.log('스와이프 일어남');
+        // A 클릭했다가 B 클릭
+        _this.figureVideoPause(_this.figureDom);
+        $(_this.figureDom).siblings().stop().fadeTo(0, 1);
+        _this.figureDom = e.currentTarget;
+        _this.captionShow(_this.figureDom);
+        _this.figureVideoPlay(_this.figureDom);
+        $(_this.figureDom).siblings().stop().fadeTo(0, 0.5);
       }
-      
-      this.touchStart = false;
-      this.touchMove = false;
+    };
+    event.end_move = function(_this, e) {
+      _this.endSwipeTime = moment();
+      if(_this.endSwipeTime.diff(_this.startSwipeTime, 'millesecond') > 500) _this.swipe = false;
+      const dist = Math.sqrt( ((_this.moveSwipePoint.X - _this.startSwipePoint.X) ** 2) + ( (_this.moveSwipePoint.Y - _this.startSwipePoint.Y) ** 2 ) );
+      let angle = (180 / Math.PI) * Math.atan2((_this.moveSwipePoint.X - _this.startSwipePoint.X), (_this.moveSwipePoint.Y - _this.startSwipePoint.Y));
+      angle = angle < 0 ? 360 + angle : angle;
+      if(dist < 70 || (angle > 280 && angle < 260 ) ) _this.swipe = false;
+      if(_this.swipe) {
+        _this.navState = true;
+        $('nav').stop().animate({
+          left: '0%'
+        },_this.navMenuTime);
+      }
+    };
+    return event;
+  }
+
+  mobileFigureEvent() {
+    this.tapEvent(this.setFigureEvent());
+    $('figure').bind('click', (e) => {
+      console.log('aaa');
     });
+  }
+
+  setRootEvent() {
+    const event = {
+      dom: '#root',
+      start: function(_this, e) {},
+      move: function(_this, e) {},
+      end_notMove: function(_this, e) {},
+      end_move: function(_this, e) {}
+    };
+    event.move = function(_this, e) {
+      if(_this.figureDom !== null) {
+        _this.captionHide();
+        $(_this.figureDom).siblings().stop().fadeTo(0, 1);
+        _this.figureDom = null;
+      }
+    };
+    event.end_notMove = function(_this, e) {
+      _this.captionHide();
+      _this.figureVideoPause(_this.figureDom);
+      $(_this.figureDom).siblings().stop().fadeTo(0, 1);
+      _this.figureDom = null;
+    };
+    return event;
+  }
+
+  mobileRootEvent() {
+    this.tapEvent(this.setRootEvent());
+  }
+
+  setDropMenuEvent() {
+    const event = {
+      dom: '.dropdown-menu',
+      start: function(_this, e) {},
+      move: function(_this, e) {},
+      end_notMove: function(_this, e) {},
+      end_move: function(_this, e) {}
+    };
+    event.move = function(_this, e) {
+      if(_this.figureDom !== null) {
+        _this.captionHide();
+        $(_this.figureDom).siblings().stop().fadeTo(0, 1);
+        _this.figureDom = null;
+      }
+    };
+    event.end_notMove = function(_this, e) {
+      _this.captionHide();
+      $(_this.figureDom).siblings().stop().fadeTo(0, 1);
+      _this.figureDom = null;
+      let changeLeftValue = (_this.navState) ? 100 : 0;
+      _this.navState = !_this.navState;
+      $('nav').stop().animate({
+        left: `${changeLeftValue}%`
+      },_this.navMenuTime);
+    };
+    return event;
+  }
+
+  mobileDropMenuEvent() {
+    this.tapEvent(this.setDropMenuEvent());
+  }
+
+  setNavMenuEvent() {
+    const event = {
+      dom: '.sidemenu',
+      start: function(_this, e) {},
+      move: function(_this, e) {},
+      end_notMove: function(_this, e) {},
+      end_move: function(_this, e) {}
+    };
+    event.start = function(_this, e) {
+      
+    };
+    event.move = function(_this, e) {
+
+    };
+    event.end_notMove = function(_this, e) {
+
+    };
+    event.end_move = function(_this, e) {
+      _this.endSwipeTime = moment();
+      if(_this.endSwipeTime.diff(_this.startSwipeTime, 'millesecond') > 500) _this.swipe = false;
+      const dist = Math.sqrt( ((_this.moveSwipePoint.X - _this.startSwipePoint.X) ** 2) + ( (_this.moveSwipePoint.Y - _this.startSwipePoint.Y) ** 2 ) );
+      let angle = (180 / Math.PI) * Math.atan2((_this.moveSwipePoint.X - _this.startSwipePoint.X), (_this.moveSwipePoint.Y - _this.startSwipePoint.Y));
+      angle = angle < 0 ? 360 + angle : angle;
+      if(dist < 70 || (angle > 280 && angle < 260 ) ) _this.swipe = false;
+      if(_this.swipe) {
+        _this.navState = true;
+        $('nav').stop().animate({
+          left: '0%'
+        },_this.navMenuTime);
+      }
+    }
+    return event;
   }
 
   figureVideoPlay(_dom) {

@@ -14,6 +14,7 @@ const About = inject("aboutData")(observer(class About extends React.Component {
 
   componentWillUnmount() {
     console.log('componentWillUnmount');
+    if(this.props.deviceType === 'MOBILE') mobileEvent.captionHide();
   }
 
   componentWillReact() {

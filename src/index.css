@@ -53,11 +53,15 @@
   */
   header .caption{
     position: fixed;
-    max-width: 300px;
+    width : -webkit-calc(100% - 40px);
+    width : -moz-calc(100% - 40px);
+    width : calc(100% - 40px);
     height: auto;
     top: 70px;
     left: 50%;
     text-align: center;
+    word-break: keep-all;
+    word-wrap: break-word;
     background-color: rgba(255,255,255,0.7);
     color: black;
     z-index: 100;
@@ -120,12 +124,12 @@
   }
 
   section main .columns {
-    -moz-column-count: 3;
-    -webkit-column-count: 3;
-    column-count: 3;
-    -webkit-column-width: 150px;
-    -moz-column-width: 150px;
-    column-width: 150px;
+    -moz-column-count: 2;
+    -webkit-column-count: 2;
+    column-count: 2;
+    -webkit-column-width: 100px;
+    -moz-column-width: 100px;
+    column-width: 100px;
     -webkit-column-gap: 0.5rem;
     -moz-column-gap: 0.5rem;
     column-gap: 0;
@@ -135,9 +139,9 @@
     display: inline-block;
     margin: 0 0 1em;
     margin-bottom: 0;
-    padding: 6px;
-    padding-top: 3px;
-    padding-bottom: 3px;
+    padding: 12px;
+    padding-top: 6px;
+    padding-bottom: 6px;
   }
   section main .columns figure .figureItem{
     width: 100% !important;
