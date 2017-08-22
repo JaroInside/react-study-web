@@ -4,7 +4,7 @@ import { ImageFigure, VideoFigure } from '../components';
 import { observer, inject } from 'mobx-react';
 import { pcEvent, mobileEvent } from '../event';
 
-const About = inject("aboutData")(observer(class About extends React.Component {
+const Bookmark = inject("bookMarkData")(observer(class About extends React.Component {
 
   componentDidMount() {
     // 이벤트 바인딩
@@ -48,8 +48,8 @@ const About = inject("aboutData")(observer(class About extends React.Component {
   }
 
   render() {
-    const figures = this.props.aboutData.data;
-    const aboutPage = (figures.length !== 0) ? (
+    const figures = this.props.bookMarkData.data;
+    const bookMarkPage = (figures.length !== 0) ? (
       <div className='columns'>
           {
             figures.map((figures) => {
@@ -72,10 +72,10 @@ const About = inject("aboutData")(observer(class About extends React.Component {
     );
     return (
       <main>
-        {aboutPage}
+        {bookMarkPage}
       </main>
     );
   }
 }));
 
-export default About;
+export default Bookmark;

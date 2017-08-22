@@ -1,14 +1,14 @@
 import { extendObservable } from 'mobx';
 import db from './firebase';
 
-class aboutData {
+class bookMarkData {
 
   constructor() {
     extendObservable(this, {
         data: []
     })
     const ref = db.ref();
-    ref.child('About').on('value' , (snapshot) => {
+    ref.child('Bookmark').on('value' , (snapshot) => {
       const list = snapshot.val();
       const datas = [];
       if (list !== null) {
@@ -27,4 +27,4 @@ class aboutData {
 
 };
 
-export default new aboutData();
+export default new bookMarkData();

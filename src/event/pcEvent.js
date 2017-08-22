@@ -5,6 +5,20 @@ class pcEvent {
 
   constructor() {
     this.pageContext = null;
+    this.setCursorPointer();
+  }
+
+  setCursorPointer() {
+    $.event.special.click = {
+      setup: function() {
+        $(this).css( 'cursor', 'pointer' );
+        return false;
+      },
+      teardown: function() {
+        $(this).css( 'cursor', '' );
+        return false;
+      }
+    };
   }
 
   setPageContext(_this) {

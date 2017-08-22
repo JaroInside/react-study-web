@@ -24,7 +24,41 @@ class mobileEvent {
 
     this.startSwipeTime = null;
     this.endSwipeTime = null;
+    this.setEvent();
   };
+
+  setEvent() {
+
+    //let moved = false;
+
+    $.event.special.sameTap = {
+	    setup    : setup,
+      teardown : teardown
+	  };
+
+    $.event.special.tap = {
+      setup    : setup,
+      teardown : teardown
+    };
+
+    function setup() {
+      console.log('tap');
+      $(this)
+      .bind('touchend', handler );
+    }
+
+    function teardown() {
+      $(this)
+      .unbind('touchend', handler );
+    }
+
+    function handler() {
+      var elem = $(this);
+      console.log(elem);
+        elem.triggerHandler( 'tap' );
+    }
+
+  }
 
   setPageContext(_this) {
     $('#root, figure').unbind('touchstart touchmove touchend');
@@ -37,8 +71,6 @@ class mobileEvent {
   }
 
   tapEvent(_event) { 
-    $.event.special.test = {};
-    console.log($.event);
     $(_event.dom).unbind('touchstart touchmove touchend')
     .bind('touchstart' , (e) => {
       console.log('Touch Start');
@@ -154,8 +186,8 @@ class mobileEvent {
 
   mobileFigureEvent() {
     this.tapEvent(this.setFigureEvent());
-    $('figure').bind('click', (e) => {
-      console.log('aaa');
+    $('figure').bind('tap',function(){
+      console.log('11');
     });
   }
 

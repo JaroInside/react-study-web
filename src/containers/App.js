@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { observer } from 'mobx-react';
-import { Home, Login, Register, About, NotFound } from '../containers';
+import { Home, Login, Register, About, Bookmark, NotFound } from '../containers';
 import { Header, Sidebar, Footer } from '../components';
 
 const App = observer( class App extends React.Component {
@@ -17,6 +17,7 @@ const App = observer( class App extends React.Component {
             <Switch>
               <Route exact={true} path='/' component={ (props) => <Home {...props} deviceType={deviceType} />}/>
               <Route path='/About' component={ (props) => <About {...props} deviceType={deviceType} />}/>
+              <Route path='/Bookmark' component={ (props) => <Bookmark {...props} deviceType={deviceType} />}/>              
               <Route path='/login' component={Login} />
               <Route path='/register' component={Register} />
               <Route component={NotFound} />
