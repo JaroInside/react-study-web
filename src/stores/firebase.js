@@ -10,6 +10,5 @@ const config = {
   messagingSenderId: firebaseconfig.messagingSenderId
 };
 firebase.initializeApp(config);
-const db = firebase.database();
 
-export default db;
+export default firebase;

@@ -55,11 +55,11 @@ const About = inject("aboutData")(observer(class About extends React.Component {
             figures.map((figures) => {
               if(figures.data.type === 'image') {
                 return (
-                  <ImageFigure data={figures.data} key={figures.id} />
+                  <ImageFigure data={figures.data} key={figures.id} device={this.props.deviceType} />
                 );
               } else {
                 return (
-                  <VideoFigure data={figures.data} key={figures.id}/>
+                  <VideoFigure data={figures.data} key={figures.id} device={this.props.deviceType} />
                 );
               }
             })

@@ -1,5 +1,5 @@
 import { extendObservable } from 'mobx';
-import db from './firebase';
+import firebase from './firebase';
 
 class bookMarkData {
 
@@ -7,6 +7,7 @@ class bookMarkData {
     extendObservable(this, {
         data: []
     })
+    const db = firebase.database();
     const ref = db.ref();
     ref.child('Bookmark').on('value' , (snapshot) => {
       const list = snapshot.val();
